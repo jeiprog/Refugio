@@ -1,0 +1,425 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>{% block title %}Inicio{% endblock %}</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f9f9f9;
+        }
+
+        nav, footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navigation .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .navigation .logo img {
+            height: 54px;
+            margin-right: 10px;
+        }
+
+        .navigation .menu-toggle {
+            display: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .navigation .menu-toggle.active {
+            transform: rotate(90deg);
+        }
+
+        .navigation .menu-items {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .navigation .menu-items a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .navigation .menu-items a:hover, .navigation .menu-items a.active {
+            background-color: #555;
+            color: #fff;
+        }
+
+        .user {
+            display: flex;
+            align-items: center;
+        }
+
+        .user .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .user .user-profile img {
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            margin-right: 10px;
+        }
+
+        .user .user-profile span {
+            margin-right: 10px;
+        }
+
+        .user .user-status {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+
+        .user .user-status .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ccc; /* Gray for offline */
+            margin-left: 5px;
+        }
+
+        .user .user-status .status-indicator.online {
+            background-color: #4caf50; /* Green for online */
+        }
+
+        .user .user-status .status-text {
+            margin-left: 5px;
+            color: #666;
+        }
+
+        footer .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            max-width: 80%;
+            margin: 0 auto;
+            padding: 10px 0;
+        }
+
+        footer .contact-info div {
+            text-align: center;
+            margin: 10px;
+            flex: 1 1 33.33%;
+            max-width: calc(33.33% - 20px);
+        }
+
+        footer .contact-info h2 {
+            margin: 5px 0;
+            font-size: 1.1rem;
+            color: #ccc;
+        }
+
+        .grupo-1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+            max-width: 80%;
+            margin: 0 auto;
+        }
+
+        .grupo-1 .box {
+            margin: 10px;
+            text-align: center;
+            flex: 0 0 calc(33.33% - 20px);
+            max-width: calc(33.33% - 20px);
+        }
+
+        .grupo-1 .box h2 {
+            color: #fff;
+            font-size: 1.2rem;
+            margin: 15px 0;
+        }
+
+        .red-social {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .red-social a {
+            display: inline-block;
+            text-decoration: none;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            color: #fff;
+            margin: 0 5px;
+            background-color: #444;
+            border-radius: 50%;
+            text-align: center;
+            transition: all 300ms ease;
+        }
+
+        .red-social a:hover {
+            color: aqua;
+        }
+
+        .grupo-2 {
+            background-color: #222;
+            padding: 10px 0;
+            text-align: center;
+            color: #ccc;
+        }
+
+        .grupo-2 small {
+            font-size: 0.9rem;
+        }
+
+        .page-title {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #0056b3;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        .card p {
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .navigation .menu-toggle {
+                display: block;
+                margin-left: auto;
+                font-size: 1.8rem;
+            }
+
+            .navigation .menu-items {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background-color: #333;
+                flex-direction: column;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+            }
+
+            .navigation .menu-items.active {
+                display: flex;
+            }
+
+            .navigation .menu-items a {
+                padding: 15px;
+                margin: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<!-- Bootstrap CSS -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+ <!-- Bootstrap JS -->
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
+
+
+<body>
+
+    <div class="page-title">
+        <h1>{% block page_title %}Inicio{% endblock %}</h1>
+    </div>
+
+    <!-- Nav -->
+    <nav>
+        <div class="navigation">
+            <div class="logo">
+                <img src="{% static 'logo.png' %}" alt="Logo">
+            </div>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="menu-items" id="menuItems">
+                <a href="{% url 'pagina_de_inicio' %}" {% if request.path == '/' %}class="active"{% endif %}>
+                    <i class="fas fa-home"></i> Inicio
+                </a>
+                {% if not request.user.is_superuser %}
+                    <a href="{% url 'citas' %}" {% if request.path == '/citas/' %}class="active"{% endif %}>
+                        <i class="fas fa-calendar-alt"></i> Citas
+                    </a>
+                    <a href="{% url 'mis_citas' %}" {% if request.path == '/mis_citas/' %}class="active"{% endif %}>
+                        <i class="fas fa-calendar-check"></i> Mis Citas
+                    </a>
+                    <a href="{% url 'masc' %}" {% if request.path == '/masc/' %}class="active"{% endif %}>
+                        <i class="fas fa-paw"></i> Mascotas Registradas
+                    </a>
+                    <a href="{% url 'donacion' %}" {% if request.path == '/donacion/' %}class="active"{% endif %}>
+                        <i class="fas fa-donate"></i> Donaciones
+                    </a>
+                {% endif %}
+                {% if request.user.is_superuser %}
+                    <a href="{% url 'crud' %}" {% if request.path == '/crud/' %}class="active"{% endif %}>
+                        <i class="fas fa-cogs"></i> Gestión de Mascotas
+                    </a>
+                    <a href="{% url 'admin_citas' %}" {% if request.path == '/admin_citas/' %}class="active"{% endif %}>
+                        <i class="fas fa-calendar"></i> Admin Citas
+                    </a>
+                    <a href="{% url 'nuevos_usuarios' %}" {% if request.path == '/nuevos_usuarios/' %}class="active"{% endif %}>
+                        <i class="fas fa-users"></i> Nuevos Usuarios
+                    </a>
+                {% endif %}
+                <div class="user">
+                    {% if request.user.is_authenticated %}
+                        <div class="user-profile">
+                            {% if request.user.perfil.foto_perfil %}
+                                <img src="{{ request.user.perfil.foto_perfil.url }}" alt="Foto de perfil">
+                            {% else %}
+                                <i class="fas fa-user"></i>
+                            {% endif %}
+                            <span>{{ request.user.username }}</span>
+                            <div class="user-status">
+                                <div class="status-indicator {% if request.user.perfil.online %}online{% else %}offline{% endif %}"></div>
+                                <span class="status-text">
+                                    {% if request.user.perfil.online %}
+                                        En línea
+                                    {% else %}
+                                        Desconectado
+                                    {% endif %}                            
+                                </span>
+                                <a href="{% url 'gestionar_perfil' %}">
+                                    <i class="fas fa-user-cog"></i>
+                                </a>
+                                <a href="{% url 'cerrar_sesion' %}">
+                                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                                </a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'login' %}">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                        <a href="{% url 'registrar' %}">
+                            <i class="fas fa-user-plus"></i> Regístrate
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <main>
+        <section class="content">
+            {% block content %}
+            {% endblock %}
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="contact-info">
+            <div>
+                <a href="https://maps.app.goo.gl/rF4CdoFTM8jNVMt19" target="_blank"><i class="fas fa-map-marker-alt"></i></a>
+                <h2>Dirección: Los Patios</h2>
+            </div>
+            <div>
+                <i class="fas fa-envelope"></i>
+                <h2>Correo: jeiprogrammers@gmail.com</h2>
+            </div>
+            <div>
+                <i class="fas fa-phone"></i>
+                <h2>Celular: 3002386774</h2>
+            </div>
+        </div>
+
+        <BR></BR>
+
+        <div class="grupo-2">
+            <small>&copy; 2024 <b>SLee Dw</b> - Todos los Derechos Reservados.</small>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const menuItems = document.querySelector('.menu-items');
+            menuToggle.classList.toggle('active');
+            menuItems.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

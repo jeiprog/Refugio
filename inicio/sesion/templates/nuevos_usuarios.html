@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Nuevos Usuarios{% endblock %}
+
+{% block content %}
+<style>
+    .usuarios-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        gap: 20px;
+    }
+
+    .usuario-section {
+        margin-top: 30px;
+    }
+
+    .usuario-section h3 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .usuario-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; /* Alinear al centro en pantallas pequeñas */
+        gap: 20px;
+    }
+
+    .usuario-card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        width: 300px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        flex: 1 0 300px; /* Flexbox para que las tarjetas se ajusten automáticamente */
+    }
+
+    .usuario-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .usuario-card h4 {
+        margin-bottom: 10px;
+    }
+
+    .usuario-card .foto-perfil {
+        margin-bottom: 10px;
+    }
+
+    .usuario-card .foto-perfil img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .usuario-card .redes-sociales {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .usuario-card .redes-sociales li {
+        margin-bottom: 5px;
+    }
+
+    .usuario-card .redes-sociales li a {
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    .usuario-card .redes-sociales li a:hover {
+        text-decoration: underline;
+    }
+
+    .usuario-card.admin {
+        background-color: #d0e9a3; 
+    }
+
+    .usuario-card.normal {
+        background-color: #d1ecf1;
+    }
+
+    .usuario-card.online {
+        border: 2px solid #28a745; /* Verde para en línea */
+    }
+
+    .usuario-card.offline {
+        border: 2px solid #dc3545; /* Rojo para desconectado */
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+        .usuario-card {
+            width: calc(100% - 40px); /* Ancho total menos el espacio para el gap */
+            max-width: 100%; /* Asegurar que no exceda el ancho de la pantalla */
+        }
+    }
+</style>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Nuevos Usuarios</h2>
+    
+    <div class="usuario-section">
+        <h3>Administradores / Ayudantes del Refugio</h3>
+        <div class="usuario-group">
+            {% for perfil in admin_profiles %}
+            <div class="usuario-card admin {{ perfil.en_linea|yesno:"online,offline" }}">
+                <h4>{{ perfil.user.username }}</h4>
+                <p><strong>Email:</strong> {{ perfil.user.email }}</p>
+                <p><strong>Teléfono:</strong> {% if perfil.telefono %}{{ perfil.telefono }}{% else %}No disponible{% endif %}</p>
+                <div class="foto-perfil">
+                    {% if perfil.foto_perfil %}
+                    <img src="{{ perfil.foto_perfil.url }}" alt="Foto de perfil">
+                    {% else %}
+                    <p>No hay foto de perfil disponible</p>
+                    {% endif %}
+                </div>
+                <ul class="redes-sociales">
+                    {% if perfil.instagram %}
+                    <li><a href="{{ perfil.instagram }}" target="_blank">Instagram</a></li>
+                    {% endif %}
+                    {% if perfil.twitter %}
+                    <li><a href="{{ perfil.twitter }}" target="_blank">Twitter</a></li>
+                    {% endif %}
+                    {% if perfil.facebook %}
+                    <li><a href="{{ perfil.facebook }}" target="_blank">Facebook</a></li>
+                    {% endif %}
+                    {% if not perfil.instagram and not perfil.twitter and not perfil.facebook %}
+                    <li>No hay redes sociales disponibles</li>
+                    {% endif %}
+                </ul>
+                <p>Estado: {% if perfil.en_linea %}En línea{% else %}Desconectado{% endif %}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="usuario-section">
+        <h3>Adoptantes</h3>
+        <div class="usuarios-list">
+            {% for perfil in normal_profiles %}
+            <div class="usuario-card normal {{ perfil.en_linea|yesno:"online,offline" }}">
+                <h4>{{ perfil.user.username }}</h4>
+                <p><strong>Email:</strong> {{ perfil.user.email }}</p>
+                <p><strong>Teléfono:</strong> {% if perfil.telefono %}{{ perfil.telefono }}{% else %}No disponible{% endif %}</p>
+                <div class="foto-perfil">
+                    {% if perfil.foto_perfil %}
+                    <img src="{{ perfil.foto_perfil.url }}" alt="Foto de perfil">
+                    {% else %}
+                    <p>No hay foto de perfil disponible</p>
+                    {% endif %}
+                </div>
+                <ul class="redes-sociales">
+                    {% if perfil.instagram %}
+                    <li><a href="{{ perfil.instagram }}" target="_blank">Instagram</a></li>
+                    {% endif %}
+                    {% if perfil.twitter %}
+                    <li><a href="{{ perfil.twitter }}" target="_blank">Twitter</a></li>
+                    {% endif %}
+                    {% if perfil.facebook %}
+                    <li><a href="{{ perfil.facebook }}" target="_blank">Facebook</a></li>
+                    {% endif %}
+                    {% if not perfil.instagram and not perfil.twitter and not perfil.facebook %}
+                    <li>No hay redes sociales disponibles</li>
+                    {% endif %}
+                </ul>
+                <p>Estado: {% if perfil.en_linea %}En línea{% else %}Desconectado{% endif %}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

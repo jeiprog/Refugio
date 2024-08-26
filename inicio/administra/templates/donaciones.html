@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block page_title %}Donaciones{% endblock %}
+{% load static %}
+{% block content %}
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: lightblue;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(15, 16, 11, 0.5);
+}
+
+h1, h2, h3 {
+    margin: 0;
+    padding: 10px 0;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+</style>
+
+<main>
+    <div class="container">
+        <h1>¡Haz tu donación Nequi!</h1>
+        <h2>¡Puedes ayudar a mejorar la calidad de vida de estas mascotas!</h2>
+        <img src="{% static 'qr.png' %}" alt="Código QR">
+        <h3>Escanea el código QR desde la aplicación de Nequi</h3>
+    </div>
+</main>
+
+{% endblock %}

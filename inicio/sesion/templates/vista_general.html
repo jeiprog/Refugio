@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+<!-- Sección de historia del refugio -->
+<div class="history-section">
+    <h2>Historia del Refugio de Santa Bárbara</h2>
+    <p>
+        El Refugio de Santa Bárbara comenzó como un hogar de paso para gatos, donde los recibíamos por unos pocos días mientras encontrábamos un hogar para ellos. Era algo que hacíamos de vez en cuando. Sin embargo, cuando llegó la pandemia, nos mudamos a un pueblo llamado Santa Bárbara, ubicado en el suroeste. Desde entonces, comenzamos una labor inmensa: esterilizar gatos ferales y cuidar gatitos bebés para luego buscarles un hogar. Nos dedicamos a esterilizar gatos ferales o sin hogar para evitar la sobrepoblación y los abandonos a largo plazo, desde el 2020. Además de cuidar a estos gatos ferales y sus cachorros, también hemos realizado rescates de gatos que atraviesan situaciones muy difíciles en las calles. Hacemos todo lo posible para que sus últimos días sean óptimos y tranquilos. La verdad es que hemos perdido la cuenta de cuántos gatos hemos logrado esterilizar y cuántos cachorros hemos dado en adopción. Esperamos poder continuar con esta labor, que no es solo nuestra, sino que es de todos y para todos. También nos preocupamos por cuidar nuestra biodiversidad y naturaleza.
+    </p>
+</div>
+
+<div id="adopt" style="text-align: center;">
+    <h1>Puedes adoptar a:</h1>
+</div>
+
+<style>
+    /* Estilo general para las tarjetas */
+    .card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;   
+        width: 25%;
+        margin: 10px;
+        transition: transform 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px); /* Efecto de levantamiento en hover */
+    }
+    
+    .card-image {
+        width: 100%;
+        height: 200px; 
+        object-fit: cover; 
+        border-bottom: 1px solid #ccc;
+    }
+    
+    .card-content {
+        padding: 15px;
+    }
+    
+    .card-content h2 {
+        margin-top: 0;
+        margin-bottom: 5px;
+        font-size: 18px; /* Tamaño de fuente ajustado para dispositivos móviles */
+    }
+    
+    .card-content p {
+        margin: 5px 0;
+        font-size: 14px; /* Tamaño de fuente ajustado para dispositivos móviles */
+    }
+
+    @media (max-width: 768px) {
+        .card {
+            width: 100%; /* Tarjetas ocupan el 100% del ancho en dispositivos pequeños */
+            margin: 10px 0;
+        }
+    }
+
+    p {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: large;
+    }
+
+    /* Estilo para el contenedor de las tarjetas utilizando flexbox */
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; /* Centra las tarjetas horizontalmente */
+        gap: 10px; /* Espacio entre las tarjetas */
+    }
+
+    /* Estilo para la paginación */
+    .pagination {
+        text-align: center;
+        margin-top: 20px;
+        z-index: 1000; /* Asegura que la paginación esté por encima de otros elementos */
+        position: relative;
+    }
+
+    .history-section {
+        margin: 20px;
+        text-align: center;
+    }
+
+    .history-section h2 {
+        font-size: 24px;
+        color: #555;
+    }
+
+    .history-section p {
+        font-size: 18px;
+        color: #555;
+        line-height: 1.6;
+    }
+</style>
+
+<main class="container-fluid">
+    <!-- Sección de mascotas -->
+    <div class="card-container">
+        {% if mascota %}
+            {% for masc in mascota %}
+            <div class="card">
+                <img src="{{ masc.foto.url }}" class="card-image">
+                <div class="card-content">
+                    <h2>Nombre: {{ masc.nombre }}</h2>
+                    <p>Edad: {{ masc.edad }}</p>
+                    <p>Genero: {{ masc.genero }}</p>
+                    <p>Raza: {{ masc.raza }}</p>
+                    <p>Descripción: {{ masc.descripcion }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No hay mascotas registradas en estos momentos.</p>
+        {% endif %}
+    </div>
+
+    <!-- Incluye la paginación aquí para que quede al final de las tarjetas -->
+    {% if mascota %}
+        <div class="pagination">
+            {% include 'paginacion.html' %}
+        </div>
+    {% endif %}
+</main>
+
+{% endblock %}

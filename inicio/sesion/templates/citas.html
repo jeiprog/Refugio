@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block page_title %}Citas{% endblock %}
+
+{% block content %}
+<h1 class="text-center my-4">Citas</h1>
+
+<div class="container">
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form id="formulario" action="{% url 'citas' %}" method="post" enctype="multipart/form-data" class="bg-light p-4 rounded shadow-sm">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="motivo">Motivo de la cita:</label>
+            <input type="text" id="motivo" name="motivo" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" class="form-control" value="2024-06-02" min="2024-01-01" max="2024-12-31">
+        </div>
+        
+        <div class="form-group">
+            <label for="hora">Hora:</label>
+            <input type="time" id="hora" name="hora" class="form-control" value="14:00:25">
+        </div>
+        
+        <div class="form-group">
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" class="form-control" rows="4" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="mascota">Mascota:</label>
+            <select id="mascota" name="mascota" class="form-control">
+                {% for mascota in mascotas %}
+                <option value="{{ mascota.id }}" data-img="{{ mascota.foto.url }}" data-raza="{{ mascota.raza }}">
+                    {{ mascota.nombre }} ({{ mascota.raza }})
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="mascotaImagen">Imagen de la Mascota:</label>
+            <div id="mascotaImagenContainer">
+                <img id="mascotaImagen" src="" alt="Imagen de la Mascota" style="width: 150px; height: 150px; object-fit: cover; display: none;">
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block">Agregar Cita</button>
+    </form>
+</div>
+
+<!-- Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<!-- Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#mascota').select2();
+
+        $('#mascota').on('change', function() {
+            var selectedOption = $(this).find('option:selected');
+            var imgSrc = selectedOption.data('img');
+            console.log("Selected image source: ", imgSrc); // Debugging line
+            if (imgSrc) {
+                $('#mascotaImagen').attr('src', imgSrc).show();
+            } else {
+                $('#mascotaImagen').hide();
+            }
+        });
+
+        // Trigger change event to show the image of the preselected option if any
+        $('#mascota').trigger('change');
+    });
+</script>
+
+
+{% endblock %}

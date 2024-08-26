@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_title %}Admin Citas{% endblock %}
+{% block content %}
+<style>
+    table {
+        width: 90%;
+        margin: 0 auto;
+        border-collapse: collapse;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    th, td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+    .cita-imagen {
+        max-width: 100px;
+        height: auto;
+        border-radius: 5px;
+    }
+    .filter-form {
+        width: 90%;
+        margin: 20px auto;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .filter-form select {
+        padding: 8px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .filter-form button {
+        background-color: #8ed7ef;
+        color: black;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .filter-form button:hover {
+        background-color: #53a0e0;
+    }
+    .edit-button, .save-button, .delete-button {
+        background-color: #8ed7ef;
+        color: black;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+    .edit-button:hover, .save-button:hover, .delete-button:hover {
+        background-color: #53a0e0;
+    }
+    .nombre-mascota {
+        text-align: center;
+    }
+    .acciones-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .no-registros {
+        text-align: center;
+        font-size: 18px;
+        color: #888;
+        padding: 20px;
+    }
+
+    /* Media Query for mobile responsiveness */
+    @media (max-width: 768px) {
+        table {
+            width: 100%;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 10px;
+        }
+        .filter-form {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .filter-form select, .filter-form button {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
+</style>
+
+<h1 style="text-align: center;">Administrar Citas</h1>
+<div class="filter-form">
+    <form method="GET" action="">
+        <label for="estado">Filtrar por estado:</label>
+        <select id="estado" name="estado">
+            <option value="">Todos</option>
+            <option value="Programada" {% if estado_seleccionado == 'Programada' %}selected{% endif %}>Programada</option>
+            <option value="No Programada" {% if estado_seleccionado == 'No Programada' %}selected{% endif %}>No Programada</option>
+        </select>
+        <button type="submit">Filtrar</button>
+    </form>
+</div>
+<div id="mostrar-cita">
+    {% if agendadas %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre de Usuario</th>
+                    <th>Teléfono</th>
+                    <th>Motivo</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Descripción</th>
+                    <th>Nombre de la Mascota</th>
+                    <th>Imagen de la Mascota</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cita in agendadas %}
+                <tr>
+                    <td>{{ cita.usuario.username }}</td>
+                    <td>
+                        {% if cita.usuario.perfil.telefono %}
+                            {{ cita.usuario.perfil.telefono }}
+                        {% else %}
+                            No disponible
+                        {% endif %}
+                    </td>
+                    <td>{{ cita.motivo }}</td>
+                    <td>{{ cita.fecha }}</td>
+                    <td>{{ cita.hora }}</td>
+                    <td>{{ cita.descripcion }}</td>
+                    <td class="nombre-mascota">{{ cita.mascota.nombre }}</td>
+                    <td>
+                        {% if cita.mascota.foto %}
+                        <img src="{{ cita.mascota.foto.url }}" alt="Imagen de la mascota" class="cita-imagen">
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="estado-text" id="estado-text-{{ cita.id }}">{{ cita.estado }}</span>
+                        <form method="POST" action="{% url 'actualizar_estado_cita' cita.id %}" id="form-{{ cita.id }}" style="display:none;">
+                            {% csrf_token %}
+                            <input type="hidden" name="cita_id" value="{{ cita.id }}">
+                            <select id="estado-{{ cita.id }}" name="estado">
+                                <option value="Programada" {% if cita.estado == 'Programada' %}selected{% endif %}>Programada</option>
+                                <option value="No Programada" {% if cita.estado == 'No Programada' %}selected{% endif %}>No Programada</option>
+                            </select>
+                            <button type="submit" class="save-button">Guardar</button>
+                        </form>
+                    </td>
+                    <td class="acciones-container">
+                        <button class="edit-button" onclick="editCita('{{ cita.id }}')">Editar</button>
+                        <form method="POST" action="{% url 'eliminar_cita' cita.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="delete-button">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="no-registros">No hay citas en estos momentos.</div>
+    {% endif %}
+</div>
+<script>
+    function editCita(citaId) {
+        const estadoText = document.getElementById(`estado-text-${citaId}`);
+        const form = document.getElementById(`form-${citaId}`);
+        const editButton = document.querySelector(`[onclick="editCita('${citaId}')"]`);
+
+        if (estadoText.style.display === "none") {
+            estadoText.style.display = "inline";
+            form.style.display = "none";
+            editButton.textContent = "Editar";
+        } else {
+            estadoText.style.display = "none";
+            form.style.display = "inline";
+            editButton.textContent = "Cancelar";
+        }
+
+        form.addEventListener('submit', function() {
+            editButton.disabled = true;
+            editButton.textContent = "Guardando...";
+        });
+    }
+</script>
+{% endblock %}

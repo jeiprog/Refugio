@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block page_title %}Historial de Mascotas{% endblock %}
+{% block content %}
+<div class="container">
+    <br><br><a class="regresar-link" href="{% url 'crud' %}" style="float: right; margin-top: -60px;">Regresar</a>
+    <ul>
+        {% for item in historial %}
+        <li>
+            <div class="item-image">
+                <img src="{{ item.foto.url }}" alt="Foto de {{ item.nombre }}">
+            </div>
+            <div class="text-container">
+                <div class="item-header">
+                    {{ item.nombre }} - Eliminado el {{ item.fecha_eliminacion }}
+                </div>
+                <div class="item-details">
+                    Edad: {{ item.edad }}<br>
+                    Raza: {{ item.raza }}<br>
+                    Motivo: {{ item.motivo_eliminacion }}<br>
+                </div>
+            </div>
+        </li>
+        {% empty %}
+        <li>No hay registros en el historial.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f4f8;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+    .container {
+        width: 90%;
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 25px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+        color: #fdfeff;
+        font-size: 32px;
+        margin-bottom: 30px;
+        text-align: center;
+        font-weight: 700;
+    }
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+    li {
+        padding: 20px;
+        border-bottom: 2px solid #eee;
+        margin-bottom: 15px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+    }
+    li:last-child {
+        border-bottom: none;
+    }
+    .item-header {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+        font-size: 18px;
+    }
+    .item-details {
+        color: #666;
+        font-size: 15px;
+    }
+    .item-image {
+        margin-right: 20px;
+    }
+    img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 2px solid #ddd;
+    }
+    .text-container {
+        flex-grow: 1;
+    }
+    .regresar-link {
+        display: block;
+        margin: 20px auto 0;
+        text-align: center;
+        font-weight: 600;
+        color: #ffffff;
+        background-color: #333;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        width: fit-content;
+    }
+</style>
+{% endblock %}

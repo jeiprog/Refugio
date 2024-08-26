@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_title %}Mascotas Registradas{% endblock %}
+
+{% block content %}
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+<div class="container">
+    {% if mascotas %}
+        <div class="row" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+            {% for mascota in mascotas %}
+                <div class="col-md-6 mb-4" style="flex: 1 0 300px; max-width: 300px;">
+                    <div class="card" style="border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                        <img src="{{ mascota.foto.url }}" class="card-img-top" style="width: 100%; height: 180px; object-fit: cover;">
+                        <div class="card-body" style="padding: 15px;">
+                            <h5 class="card-title" style="margin-bottom: 10px; font-size: 1.2em;">Nombre: {{ mascota.nombre }}</h5>
+                            <p class="card-text" style="color: #666; font-size: 0.9em;">
+                                Descripción: {{ mascota.descripcion }}<br>
+                                Edad: {{ mascota.edad }} años<br>
+                                Raza: {{ mascota.raza }}<br>
+                                Género: {{ mascota.genero }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Incluye la paginación aquí para que quede al final de las tarjetas -->
+        <div class="pagination">
+            {% include 'paginacion.html' %}
+        </div>
+    {% else %}
+        <p style="text-align: center; font-size: large; color: #666;">No hay mascotas registradas en estos momentos.</p>
+    {% endif %}
+</div>
+{% endblock %}

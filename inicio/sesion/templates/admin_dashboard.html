@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    .admin-dashboard {
+        padding: 40px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        margin-top: 20px;
+    }
+
+    .admin-dashboard h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 40px;
+        color: #333;
+    }
+
+    .dashboard-metrics {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .metric {
+        background-color: #007bff;
+        color: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        flex: 1 1 250px; 
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .metric:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .metric h2 {
+        margin: 0;
+        font-size: 1.8rem;
+    }
+
+    .metric p {
+        font-size: 2.5rem;
+        margin: 10px 0 0;
+    }
+
+    .metric:nth-child(1) {
+        background-color: #007bff;
+    }
+
+    .metric:nth-child(2) {
+        background-color: #28a745;
+    }
+
+    .metric:nth-child(3) {
+        background-color: #ffc107;
+    }
+
+    .metric:nth-child(4) {
+        background-color: #dc3545;
+    }
+
+    .metric i {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        display: block;
+    }
+</style>
+<div class="admin-dashboard">
+    <h1>Admin Dashboard</h1>
+    <div class="dashboard-metrics">
+        <div class="metric">
+            <i class="fas fa-users"></i>
+            <h2>Adoptantes</h2>
+            <p>{{ num_users }}</p>
+        </div>
+        <div class="metric">
+            <i class="fas fa-user-shield"></i>
+            <h2>Admin/ayudantes</h2>
+            <p>{{ num_superusers }}</p>
+        </div>
+        <div class="metric">
+            <i class="fas fa-paw"></i>
+            <h2>Mascotas Registradas</h2>
+            <p>{{ num_mascotas }}</p>
+        </div>
+        <div class="metric">
+            <i class="fas fa-calendar-alt"></i>
+            <h2>Citas</h2>
+            <p>{{ num_citas }}</p>
+        </div>
+    </div>
+</div>
+<canvas id="myChart" style="max-height: 400px; max-width: 1000px;"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {      
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+        var myChart = new Chart(ctx, {
+            type: 'bar',  
+            data: {
+                labels: ['Adoptantes', 'Admin/ayudantes', 'Mascotas Registradas', 'Citas Programadas'],
+                datasets: [{
+                    label: 'Cantidad',
+                    data: [{{ num_users }}, {{ num_superusers }}, {{ num_mascotas }}, {{ num_citas }}],
+                    backgroundColor: [
+                        '#007bff',
+                        '#28a745',
+                        '#ffc107',
+                        '#dc3545'
+                    ],
+                    borderColor: [
+                        '#007bff',
+                        '#28a745',
+                        '#ffc107',
+                        '#dc3545'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block page_title %}Mis Citas{% endblock %}
+{% block content %}
+<h1>Mis Citas</h1>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .citas-table {
+        width: 100%;
+        margin: 0 auto;
+        border-collapse: collapse;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .citas-table th, .citas-table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .citas-table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    .citas-table tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    .cita-imagen {
+        max-width: 100px;
+        height: auto;
+        border-radius: 5px;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .citas-table {
+            font-size: 14px;
+        }
+
+        .citas-table th, .citas-table td {
+            padding: 10px;
+        }
+
+        .citas-table th:nth-of-type(1), 
+        .citas-table td:nth-of-type(1),
+        .citas-table th:nth-of-type(2),
+        .citas-table td:nth-of-type(2),
+        .citas-table th:nth-of-type(3),
+        .citas-table td:nth-of-type(3),
+        .citas-table th:nth-of-type(4),
+        .citas-table td:nth-of-type(4),
+        .citas-table th:nth-of-type(5),
+        .citas-table td:nth-of-type(5),
+        .citas-table th:nth-of-type(6),
+        .citas-table td:nth-of-type(6),
+        .citas-table th:nth-of-type(7),
+        .citas-table td:nth-of-type(7) {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .citas-table td {
+            position: relative;
+            padding-left: 50%;
+            text-align: right;
+        }
+
+        .citas-table td::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 0;
+            width: 50%;
+            padding-left: 10px;
+            white-space: nowrap;
+            font-weight: bold;
+            background: #f2f2f2;
+        }
+
+        .citas-table th, .citas-table td {
+            display: block;
+        }
+    }
+</style>
+
+{% if user.is_authenticated %}
+    {% if citas %}
+        <table class="citas-table">
+            <thead>
+                <tr>
+                    <th>Motivo</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Descripción</th>
+                    <th>Nombre de la Mascota</th>
+                    <th>Imagen de la Mascota</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cita in citas %}
+                    <tr>
+                        <td data-label="Motivo">{{ cita.motivo }}</td>
+                        <td data-label="Fecha">{{ cita.fecha }}</td>
+                        <td data-label="Hora">{{ cita.hora }}</td>
+                        <td data-label="Descripción">{{ cita.descripcion }}</td>
+                        <td data-label="Nombre de la Mascota">{{ cita.mascota.nombre }}</td>
+                        <td data-label="Imagen de la Mascota">
+                            {% if cita.mascota.foto %}
+                                <img src="{{ cita.mascota.foto.url }}" alt="Imagen de la mascota" class="cita-imagen">
+                            {% endif %}
+                        </td>
+                        <td data-label="Estado">{{ cita.estado }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No tienes citas agendadas.</p>
+    {% endif %}
+{% else %}
+    <p>Debes <a href="{% url 'login' %}">iniciar sesión</a> para ver tus citas.</p>
+{% endif %}
+{% endblock %}

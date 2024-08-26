@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block page_title %}Gestionar Perfil{% endblock %}
+
+{% block content %}
+
+<style>
+    /* Estilos para la navegación dentro del formulario */
+    .custom-nav {
+        background: lightblue;
+        border-radius: 7px;
+        color: black;
+        padding: 10px;
+        text-align: center;
+        position: sticky; /* Hace que el nav se quede en la parte superior al hacer scroll */
+        top: 0; /* Fija el nav en la parte superior del contenedor */
+        z-index: 10; /* Asegura que el nav esté encima del contenido si es necesario */
+        margin-bottom: 20px; /* Espacio debajo del nav */
+    }
+
+    .custom-username {
+        font-size: xx-large;
+        margin: 0;
+    }
+
+    .custom-img-perfil {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 20px;
+    }
+
+    /* Estilos para el contenedor del formulario */
+    .custom-form-container {
+        max-width: 400px;
+        margin: auto;
+        background-color: lightblue;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        position: relative; /* Asegura la posición correcta del formulario */
+    }
+
+    .custom-form-container h2 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .custom-btn-submit {
+        margin-top: 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 12px 30px;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-btn-submit:hover {
+        background-color: #0056b3;
+    }
+
+    /* Ajustes para el formulario */
+    .custom-form {
+        margin: 0;
+        padding: 0;
+        float: none;
+        display: inline-block;
+    }
+</style>
+
+<main>
+    <div class="custom-form-container">
+        <h2>Gestionar Perfil</h2>
+        <form method="post" enctype="multipart/form-data" class="custom-form">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <nav class="custom-nav">
+                {% if request.user.is_authenticated %}
+                    <h1 class="custom-username">{{ request.user.username }}</h1>
+                {% endif %}
+                {% if request.user.perfil.foto_perfil %}
+                    <img src="{{ request.user.perfil.foto_perfil.url }}" alt="Foto de perfil" class="custom-img-perfil">
+                {% endif %}
+            </nav>
+            <button type="submit" class="custom-btn-submit">Guardar</button>
+        </form>
+    </div>
+</main>
+
+{% endblock %}
+
+{% block extra_js %}
+<!-- Bootstrap CSS -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
+{% endblock %}
+

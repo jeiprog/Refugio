@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'estilo.css' %}">
+    
+</head>
+<body>
+    
+    <form id="form_modificar" method="post" enctype="multipart/form-data">
+        <h2>Modificar a: {{ mascota.nombre }}</h2>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="button" onclick="confirmacionModificar()">GUARDAR</button>
+        <button type="submit" style="display: none;">Guardar Real</button>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmacionModificar() {
+            Swal.fire({
+                title: "¿Quieres guardar los cambios?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Guardar",
+                denyButtonText: `No guardar`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('form_modificar').submit();
+                    swal.fire({icon: "success"})
+                } else if (result.isDenied) {
+                    Swal.fire("Los cambios no se guardaron", "", "info");
+                    
+                }
+            });
+        }
+    </script>
+</body>
+</html>
